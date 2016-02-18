@@ -1,0 +1,86 @@
+.simple-modal,
+.simple-modal p,
+.simple-modal h1,
+.simple-modal h2,
+.simple-modal h3,
+.simple-modal h4,
+.simple-modal h5,
+.simple-modal h6,
+.simple-modal label,
+.simple-modal input
+{
+  color: #666;
+}
+
+.simple-modal input
+{
+  background-color: #fff;
+  padding: 8px 16px;
+  outline: none;
+  border: 1px solid #ddd;
+}
+
+.simple-modal input:focus
+{
+  border: 1px solid #aaa;
+}
+
+.simple-modal a
+{
+  color: #555;
+}
+
+.simple-modal-background
+{
+  background-color: #666;
+  opacity: 0.4;
+}
+
+.simple-modal
+{
+  background-color: #fff;
+  opacity: 1;
+  box-shadow: 5px 5px 10px #666;
+}
+
+.simple-modal .simple-modal-body::-webkit-scrollbar-track
+{
+  background-color: #ddd;
+}
+
+.simple-modal .simple-modal-body::-webkit-scrollbar
+{
+  width: 4px;
+  background-color: #ddd;
+}
+
+.simple-modal .simple-modal-body::-webkit-scrollbar-thumb
+{
+  background-color: #aaa;
+  border: 1px solid #aaa;
+}
+
+.simple-modal-buttons button
+{
+  border: 1px solid #666;
+  background-color: transparent;
+}
+
+.simple-modal-buttons button:hover
+{
+  background-color: #666;
+  color: #fff;
+}
+
+.simple-modal-buttons button.primary
+{
+  background-color: #3399ff;
+  border: 1px solid #3399ff;
+  color: #fff;
+}
+
+.simple-modal-buttons button.primary:hover
+{
+  background-color: #0066cc;
+  border: 1px solid #0066cc;
+}

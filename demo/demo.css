@@ -1,0 +1,292 @@
+html,
+body
+{
+  font-family: 'Open Sans', sans-serif;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font-weight: 200;
+  font-size: 14px;
+}
+
+body
+{
+  background-image: url('/images/background.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #555;
+  height: 2400px;
+  background-position: center -100px;
+}
+
+pre
+{
+  font-family: 'Source Code Pro';
+  color: #555;
+  background-color: #eee;
+  padding: 30px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 260px;
+}
+
+.navigation-wrapper
+{
+  position: fixed;
+  width: 100%;
+  color: #fff;
+}
+
+.navigation-container
+{
+  padding: 15px 0;
+  background-color: #555;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navigation-container .title
+{
+  font-size: 26px;
+  font-weight: 200;
+  padding-left: 25px;
+}
+
+.navigation-container .vertical-aligner
+{
+  vertical-align: bottom;
+}
+
+.navigation-container .title a
+{
+  font-weight: 400;
+  color: #fff;
+  opacity: 0.6;
+  text-decoration: none;
+}
+
+.navigation-container .title a:hover
+{
+  opacity: 1;
+}
+
+.navigation-container .title,
+.navigation-container .link-container,
+.navigation-container .vertical-aligner
+{
+  display: inline-block;
+  height: 35px;
+}
+
+.navigation-container .link-container
+{
+  float: right;
+  padding-right: 25px;
+}
+
+.navigation-container,
+.content-wrapper
+{
+  width: 90%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.navigation-container > *
+{
+  display: inline-block;
+}
+
+.navigation-container ul
+{
+  display: inline-block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation-container ul li
+{
+  display: inline-block;
+  margin: 0 4px;
+}
+
+.navigation-container ul li a
+{
+  color: #fff;
+  opacity: 0.8;
+  font-weight: 200;
+  text-decoration: none;
+  width: 140px;
+  text-align: center;
+  padding: 6px 12px;
+  text-transform: capitalize;
+}
+
+.navigation-container ul li a:hover
+{
+  color: #222;
+  opacity: 1;
+  background-color: #fff;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+}
+
+.content-wrapper
+{
+  min-height: 100vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.upper-content-container .vertical-align,
+.upper-content-container
+{
+  height: 600px;
+}
+
+.upper-content-container
+{
+  padding: 65px 4vw 2vh 4vw;
+  background-color: rgba(255,255,255,0.2);
+  text-align: center;
+}
+
+.upper-content-container p
+{
+  max-width: 500px;
+  width: 80%;
+  margin: 15px auto 40px auto;
+  font-weight: 600;
+  color: #555;
+}
+
+.upper-content-container .links img
+{
+  max-width: 40px;
+  max-height: 40px;
+  padding: 0 5px;
+}
+
+.upper-content-container .links a
+{
+  opacity: 0.6;
+}
+
+.upper-content-container .links a:hover
+{
+  opacity: 1;
+}
+
+.upper-content-container .vertical-align,
+.upper-content-container .wrapper
+{
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.lower-content-wrapper
+{
+  padding: 2vh 4vw;
+  background-color: #fff;
+  height: 1400px;
+}
+
+h1
+{
+  font-family: 'Poiret One', cursive;
+  font-weight: 200;
+  margin: 0;
+  font-size: 45px;
+}
+
+h2
+{
+  font-weight: 200;
+  margin: 0;
+  font-size: 30px;
+  text-transform: capitalize;
+  margin-bottom: 80px;
+  text-indent: 25px;
+}
+
+h4
+{
+  margin: 0;
+  font-size: 22px;
+  text-transform: capitalize;
+  font-weight: 200;
+}
+
+.section
+{
+  padding: 60px 0;
+}
+
+button
+{
+  padding: 12px 20px;
+  text-transform: capitalize;
+  background-color: #fff;
+  border-radius: 30px;
+  border: 2px solid #aaa;
+  outline: none;
+  min-width: 120px;
+  cursor: pointer;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  text-align: center;
+  font-size: 14px;
+}
+
+button:active,
+button:hover
+{
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+button.primary
+{
+  background-color: #3399ff;
+  color: #fff;
+  box-shadow: none;
+  border: none;
+}
+
+button.primary:active,
+button.primary:hover
+{
+  background-color: #004d99;
+}
+
+.demo-container
+{
+  margin-bottom: 30px;
+}
+
+.demo-container:last-of-type
+{
+  margin-bottom: 0;
+}
+
+.demo-container .button,
+.demo-container .description,
+.demo-container .showcode
+{
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.demo-container .button,
+.demo-container .showcode
+{
+  width: 20%;
+}
+
+.demo-container .description
+{
+  width: 50%;
+  margin: 0 4%;
+}
+
+.demo-container .showcode
+{
+  text-align: right;
+}
