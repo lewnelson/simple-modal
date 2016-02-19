@@ -3,7 +3,8 @@ A simple javascript modal library
 
 Official Documentation http://www.simplemodal.xyz/
 
+Install with bower
 
-Download with bower using
-
+```
 bower install simple-modal
+```
