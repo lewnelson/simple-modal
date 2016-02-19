@@ -13,7 +13,12 @@
  */
 var SimpleModalOptions = {
   disableScrolling: true,
-  transitionTime: 600
+  transitionTime: 400,
+  titleTag: 'h4',
+  maximumModals: 6,
+  onComplete: null,
+  theme: null,
+  closableOnOutsideClick: true
 };
 
 /**
@@ -73,7 +78,7 @@ function SimpleModal(options) {
     body: '',
     closable: true,
     closableOnOutsideClick: true,
-    closeOnCallback: true
+    titleTag: 'h4'
   }
 
   /**
@@ -99,21 +104,16 @@ function SimpleModal(options) {
   }
 
   /**
-   *  Holds final options values to
-   *  minimise execution time where
-   *  get functions are run multiple times
-   *
-   *  @param object
-   */
-  var setOptionsObject = {};
-
-  /**
    *  Sets the local options
    *
    *  @param object options
    *  @return void
    */
   function setOptions(options) {
+    if(typeof options === 'undefined') {
+      var options = {};
+    }
+
     localOptions = options;
   }
 
@@ -138,10 +138,6 @@ function SimpleModal(options) {
    *  @return string
    */
   function getSize() {
-    if(typeof setOptionsObject.size !== 'undefined') {
-      return setOptionsObject.size;
-    }
-
     var sizeOption = getOption('size');
     if(sizeOption === null) {
       var size = defaultOptions.size;
@@ -157,8 +153,49 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.size = size;
     return size;
+  }
+
+  /**
+   *  Gets modal theme from options if set or no themes is used
+   *
+   *  @return string
+   */
+  function getTheme() {
+    var themeOption = getOption('theme');
+    var theme = null;
+    if(themeOption !== null) {
+      if(typeof themeOption === 'string') {
+        var theme = themeOption;
+      }
+    } else {
+      if(typeof window.SimpleModalOptions.theme === 'string') {
+        var theme = window.SimpleModalOptions.theme;
+      }
+    }
+
+    return theme;
+  }
+
+  /**
+   *  Gets the tag type for the modal title
+   *
+   *  @return string
+   */
+  function getTitleElementTag() {
+    var titleTagOption = getOption('titleTag');
+    var titleTag = window.SimpleModalOptions.titleTag;
+    if(titleTagOption !== null) {
+      if(typeof titleTagOption === 'string') {
+        var titleTag = titleTagOption;
+      }
+    } else {
+      if(typeof titleTag !== 'string') {
+        var titleTag = defaultOptions.titleTag;
+      }
+    }
+
+    return titleTag;
   }
 
   /**
@@ -167,10 +204,6 @@ function SimpleModal(options) {
    *  @return string
    */
   function getTitle() {
-    if(typeof setOptionsObject.title !== 'undefined') {
-      return setOptionsObject.title;
-    }
-
     var titleOption = getOption('title');
     if(titleOption === null) {
       var title = defaultOptions.title;
@@ -182,7 +215,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.title = title;
     return title;
   }
 
@@ -192,9 +224,6 @@ function SimpleModal(options) {
    *  @return string
    */
   function getBody() {
-    if(typeof setOptionsObject.body !== 'undefined') {
-      return setOptionsObject.body;
-    }
 
     var bodyOption = getOption('body');
     if(bodyOption === null) {
@@ -207,7 +236,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.body = body;
     return body;
   }
 
@@ -217,10 +245,6 @@ function SimpleModal(options) {
    *  @return boolean
    */
   function isClosable() {
-    if(typeof setOptionsObject.closable !== 'undefined') {
-      return setOptionsObject.closable;
-    }
-
     var closableOption = getOption('closable');
     if(closableOption === null) {
       var closable = defaultOptions.closable;
@@ -232,7 +256,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.closable = closable;
     return closable;
   }
 
@@ -243,13 +266,13 @@ function SimpleModal(options) {
    *  @return boolean
    */
   function isClosableOnOutsideClick() {
-    if(typeof setOptionsObject.closableOnOutsideClick !== 'undefined') {
-      return setOptionsObject.closableOnOutsideClick;
-    }
-
     var closableOnOutsideClickOption = getOption('closableOnOutsideClick');
     if(closableOnOutsideClickOption === null) {
-      var closableOnOutsideClick = defaultOptions.closableOnOutsideClick;
+      if(typeof window.SimpleModalOptions.closableOnOutsideClick === 'boolean') {
+        var closableOnOutsideClick = window.SimpleModalOptions.closableOnOutsideClick;
+      } else {
+        var closableOnOutsideClick = defaultOptions.closableOnOutsideClick;
+      }
     } else {
       if(typeof closableOnOutsideClickOption === 'boolean') {
         var closableOnOutsideClick = closableOnOutsideClickOption;
@@ -258,7 +281,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.closableOnOutsideClick = closableOnOutsideClick;
     return closableOnOutsideClick;
   }
 
@@ -268,10 +290,6 @@ function SimpleModal(options) {
    *  @return array
    */
   function getButtonOptions() {
-    if(typeof setOptionsObject.buttons !== 'undefined') {
-      return setOptionsObject.buttons;
-    }
-
     var buttonsOption = getOption('buttons');
     var completeButtonOptions = [];
     if(buttonsOption !== null) {
@@ -302,7 +320,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.buttons = completeButtonOptions;
     return completeButtonOptions;
   }
 
@@ -314,6 +331,9 @@ function SimpleModal(options) {
    */
   function createButtonElement(buttonOptions) {
     var buttonElement = document.createElement('button');
+    if(buttonOptions.value === 'undefined') {
+      throw new Error('Missing value for button in SimpleModal');
+    }
     var text = document.createTextNode(buttonOptions.value);
     buttonElement.appendChild(text);
     if(buttonOptions.class !== null) {
@@ -342,16 +362,11 @@ function SimpleModal(options) {
    *  @return integer
    */
   function getTransitionTime() {
-    if(typeof setOptionsObject.transitionTime !== 'undefined') {
-      return setOptionsObject.transitionTime;
-    }
-
     var transitionTime = getOption('transitionTime');
     if(transitionTime === null) {
       var transitionTime = parseInt(window.SimpleModalOptions.transitionTime);
     }
 
-    setOptionsObject.transitionTime = transitionTime;
     return transitionTime;
   }
 
@@ -397,7 +412,11 @@ function SimpleModal(options) {
    */
   function showBackground() {
     var backgroundElement = document.createElement('div');
+    var theme = getTheme();
     backgroundElement.classList.add('simple-modal-background');
+    if(theme !== null) {
+      backgroundElement.classList.add(theme);
+    }
     backgroundElement.classList.add('simple-modal-hide');
     modalBackgroundElement = backgroundElement;
     document.body.appendChild(backgroundElement);
@@ -421,7 +440,10 @@ function SimpleModal(options) {
   function hideBackground() {
     fadeOut(modalBackgroundElement);
     setTimeout(function() {
-      modalBackgroundElement.parentNode.removeChild(modalBackgroundElement);
+      var parent = modalBackgroundElement.parentNode;
+      if(parent !== null) {
+        parent.removeChild(modalBackgroundElement);
+      }
     }, getTransitionTime());
   }
 
@@ -434,6 +456,10 @@ function SimpleModal(options) {
     var onCompleteCallback = getOption('onComplete');
     if(typeof onCompleteCallback === 'function') {
       onCompleteCallback(modal);
+    } else {
+      if(typeof window.SimpleModalOptions.onComplete === 'function') {
+        onCompleteCallback(modal);
+      }
     }
   }
 
@@ -546,10 +572,6 @@ function SimpleModal(options) {
    *  @return function || null
    */
   function getCustomFadeInFunction() {
-    if(typeof setOptionsObject.customFadeIn !== 'undefined') {
-      return setOptionsObject.customFadeIn;
-    }
-
     var customFadeInOption = getOption('customFadeIn');
     if(typeof customFadeInOption === 'function') {
       var customFadeIn = customFadeInOption;
@@ -561,7 +583,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.customFadeIn = customFadeIn;
     return customFadeIn;
   }
 
@@ -572,10 +593,6 @@ function SimpleModal(options) {
    *  @return function || null
    */
   function getCustomFadeOutFunction() {
-    if(typeof setOptionsObject.customFadeOut !== 'undefined') {
-      return setOptionsObject.customFadeOut;
-    }
-
     var customFadeOutOption = getOption('customFadeOut');
     if(typeof customFadeOutOption === 'function') {
       var customFadeOut = customFadeOutOption;
@@ -587,7 +604,6 @@ function SimpleModal(options) {
       }
     }
 
-    setOptionsObject.customFadeOut = customFadeOut;
     return customFadeOut;
   }
 
@@ -599,7 +615,7 @@ function SimpleModal(options) {
   function fadeIn(element, finalOpacity) {
     var customFadeIn = getCustomFadeInFunction();
     if(typeof customFadeIn === 'function') {
-      customFadeIn(element);
+      customFadeIn(element, getTransitionTime());
     } else {
       var direction = 'positive';
       if(typeof finalOpacity === 'undefined') {
@@ -618,10 +634,49 @@ function SimpleModal(options) {
   function fadeOut(element) {
     var customFadeOut = getCustomFadeOutFunction();
     if(typeof customFadeOut === 'function') {
-      customFadeOut(element);
+      customFadeOut(element, getTransitionTime());
     } else {
       var direction = 'negative';
       animateOpacity(direction, element);
+    }
+  }
+
+  /**
+   *  If number of modals on page exceeds total allowed modals then they are removed
+   *  in the order they were added. Anomalies may occur when setting different animation
+   *  times on individual modals.
+   *
+   *  @return void
+   */
+  function cleanupModals() {
+    var maximumModals = window.SimpleModalOptions.maximumModals;
+    if(typeof maximumModals === 'number') {
+      maximumModals = parseInt(maximumModals);
+      if(maximumModals > 0) {
+        var allModals = document.getElementsByClassName('simple-modal');
+        var allModalBackgrounds = document.getElementsByClassName('simple-modal-background');
+        var total = allModals.length;
+        var modalsToRemove = total - maximumModals;
+        if(modalsToRemove > 0) {
+          for(var i = 0; i < modalsToRemove; i++) {
+            var modalToRemove = allModals[i];
+            var modalBackgroundToRemove = allModalBackgrounds[i];
+            fadeOut(modalToRemove);
+            fadeOut(modalBackgroundToRemove);
+            setTimeout(function(modalToRemove, modalBackgroundToRemove) {
+              var modalParent = modalToRemove.parentNode;
+              var backgroundParent = modalBackgroundToRemove.parentNode;
+              if(modalParent !== null) {
+                modalParent.removeChild(modalToRemove);
+              }
+
+              if(backgroundParent !== null) {
+                backgroundParent.removeChild(modalBackgroundToRemove);
+              }
+            }, getTransitionTime(), modalToRemove, modalBackgroundToRemove);
+          }
+        }
+      }
     }
   }
 
@@ -634,7 +689,11 @@ function SimpleModal(options) {
   this.show = function(callback) {
     var newModal = document.createElement('div');
     var size = getSize();
+    var theme = getTheme();
     newModal.classList.add('simple-modal');
+    if(theme !== null) {
+      newModal.classList.add(theme);
+    }
     newModal.classList.add('simple-modal-hide');
     newModal.classList.add(size);
 
@@ -656,8 +715,10 @@ function SimpleModal(options) {
     if(title.length > 0) {
       var modalTitle = document.createElement('div');
       modalTitle.classList.add('simple-modal-title');
+      var titleTagElement = document.createElement(getTitleElementTag());
       var titleElement = document.createTextNode(title);
-      modalTitle.appendChild(titleElement);
+      titleTagElement.appendChild(titleElement);
+      modalTitle.appendChild(titleTagElement);
       modalInner.appendChild(modalTitle);
     } else {
       newModal.classList.add('simple-modal-no-title');
@@ -697,6 +758,7 @@ function SimpleModal(options) {
       callback(modal);
     }
     disableScroll();
+    cleanupModals();
     return modal;
   }
 
@@ -713,7 +775,10 @@ function SimpleModal(options) {
         fadeOut(modalElement);
 
         setTimeout(function() {
-          modalElement.parentNode.removeChild(modalElement);
+          var parent = modalElement.parentNode;
+          if(parent !== null) {
+            parent.removeChild(modalElement);
+          }
           enableScroll();
           if(typeof callback === 'function') {
             callback(modal);
@@ -726,40 +791,110 @@ function SimpleModal(options) {
   }
 
   /**
+   *  Force all modals to close
+   *
+   *  @param callback function
+   *  @return object {this}
+   */
+  this.closeAll = function(callback) {
+    var allModals = document.getElementsByClassName('simple-modal');
+    var allModalBackgrounds = document.getElementsByClassName('simple-modal-background');
+    if(allModals.length > 0) {
+      for(var i = 0; i < allModals.length; i++) {
+        var modalToRemove = allModals[i];
+        var modalBackgroundToRemove = allModalBackgrounds[i];
+        fadeOut(modalToRemove);
+        fadeOut(modalBackgroundToRemove);
+        setTimeout(function(modalToRemove, modalBackgroundToRemove) {
+          var modalParent = modalToRemove.parentNode;
+          var backgroundParent = modalBackgroundToRemove.parentNode;
+          if(modalParent !== null) {
+            modalParent.removeChild(modalToRemove);
+          }
+
+          if(backgroundParent !== null) {
+            backgroundParent.removeChild(modalBackgroundToRemove);
+          }
+        }, getTransitionTime(), modalToRemove, modalBackgroundToRemove);
+      }
+    }
+
+    return modal;
+  }
+
+  /**
    *  Updates the title text, if no title was given to begin with then no title will be updated
    *
    *  @param string newTitle
-   *  @return void
+   *  @param boolean overwrite
+   *  @return object {this}
    */
-  this.updateTitle = function(newTitle) {
+  this.updateTitle = function(newTitle, overwrite) {
     var titleElement = modalElement.getElementsByClassName('simple-modal-title');
     if(typeof newTitle !== 'string') {
       throw new Error('Invalid value given for titleElement, expecting type string.');
     } else {
+      var newTitleElement = document.createElement(getTitleElementTag());;
       var newTitleTextNode = document.createTextNode(newTitle);
+      newTitleElement.appendChild(newTitleTextNode);
     }
 
     if(titleElement.length > 0 && newTitle.length > 0) {
       titleElement[0].innerHTML = '';
-      titleElement[0].appendChild(newTitleTextNode);
+      titleElement[0].appendChild(newTitleElement);
+      if(typeof overwrite !== 'boolean') {
+        var overwrite = false;
+      }
+
+      if(overwrite === true) {
+        localOptions.title = newTitle;
+      }
+    } else if(newTitle.length > 0) {
+      if(typeof overwrite !== 'boolean') {
+        var overwrite = true;
+      }
+
+      if(overwrite === true) {
+        localOptions.title = newTitle;
+      }
     }
+
+    return modal;
   }
 
   /**
    *  Updates the body content of the modal, if no body was given to begin with then no body will be updated
    *
    *  @param string bodyHtml
-   *  @return void
+   *  @param boolean overwrite
+   *  @return object {this}
    */
-  this.updateBody = function(bodyHtml) {
+  this.updateBody = function(bodyHtml, overwrite) {
     var bodyElement = modalElement.getElementsByClassName('simple-modal-body');
     if(typeof bodyHtml !== 'string') {
       throw new Error('Invalid value given for updateBody, expecting type string.');
     }
 
     if(bodyElement.length > 0) {
+      if(typeof overwrite !== 'boolean') {
+        var overwrite = false;
+      }
+
       bodyElement[0].innerHTML = bodyHtml;
+      if(overwrite === true) {
+        localOptions.body = bodyHtml;
+      }
+    } else {
+      if(typeof overwrite !== 'boolean') {
+        var overwrite = true;
+      }
+
+      if(overwrite === true) {
+        localOptions.body = bodyHtml;
+      }
     }
+
+    return modal;
   }
 
   /**
