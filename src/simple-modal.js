@@ -299,11 +299,11 @@ function SimpleModal(options) {
         for(index in buttonsOption) {
           var button = buttonsOption[index];
           for(key in button) {
-            if(validButtonOptions[key] === 'undefined') {
+            if(typeof validButtonOptions[key] === 'undefined') {
               throw new Error('Invalid button option, `' + key + '`.');
             } else {
               var type = validButtonOptions[key];
-              if(typeof button[key] !== type) {
+              if(typeof button[key] !== type && button[key] !== defaultButtonOptions[key]) {
                 throw new Error('Invalid type for button option, `' + key + '`. Expecting type ' + type + '.');
               }
             }
